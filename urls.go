@@ -1,12 +1,13 @@
-package DockerBackend
+package main
 
 import (
 	"log"
 	"net/http"
+	"./utils"
 )
 
 func init(){
-
+	utils.InitDockerClient()
 }
 
 func startDockerBackend(){
