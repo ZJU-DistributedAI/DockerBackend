@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
 	"log"
@@ -61,17 +62,21 @@ func CreateDockerContainer(cli *client.Client, imagename string, ports ...string
 
 	resp, err := cli.ContainerCreate(context.Background(), &container.Config{
 		Image: imagename,
-		Cmd:   []string{""},
-		Volumes: map[string]struct{}{
-			"C:\\Users\\huyifan01\\Documents\\MachineLearning": struct{}{},
-		},
 		ExposedPorts: exports,
+		Cmd: []string{"./train.sh"},
 	}, &container.HostConfig{
 		PortBindings: portMap,
+		Mounts: []mount.Mount{
+			{
+				Type: mount.TypeBind,
+				Source: "D:\\MachineLearning",
+				Target: "/MachineLearning",
+			},
+		},
 	}, nil, "test")
 
 	if err != nil {
-		log.Panic(err)
+		log.Println("创建容器出错: ",err)
 	}
 
 	return resp
