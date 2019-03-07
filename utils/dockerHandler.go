@@ -89,6 +89,21 @@ func StartDockerContainer(cli *client.Client, resp container.ContainerCreateCrea
 	return err
 }
 
+func WaitForContainer(cli *client.Client, containerid string)(){
+
+	resp, errchan := cli.ContainerWait(context.Background(), containerid, container.WaitConditionNotRunning)
+
+	select{
+	case err:= <- errchan:
+		if err != nil {
+			log.Panic("wait for container fail: ", err)
+		}
+
+	case <-resp:
+	}
+
+}
+
 func GetDockerImages() {
 
 }

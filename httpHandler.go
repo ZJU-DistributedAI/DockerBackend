@@ -44,17 +44,20 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 
 
 	var ports []string = []string{"8888", "6006", "9091"}
-	resp := utils.CreateDockerContainer(cli, "/root/MachineLearning",
+	resp := utils.CreateDockerContainer(cli, "//root//MachineLearning",
 		"zjudistributeai/images:v0.3", ports...)
 
 	err := utils.StartDockerContainer(cli, resp)
 
 	if err != nil {
-		log.Println("启动容器失败: ", err)
-		data = Data{Msg: "启动容器失败", Code: 500}
-	}else{
-		data = Data{Msg: "启动容器成功", Code: 200}
+		log.Panic("启动容器失败: ", err)
 	}
+
+	utils.WaitForContainer(cli, resp.ID)
+
+
+	data = Data{Msg: "执行训练任务成功", Code: 200}
+
 
 	js, _ := json.Marshal(data)
 	w.Write(js)
