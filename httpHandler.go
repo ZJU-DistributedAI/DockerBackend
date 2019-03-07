@@ -44,7 +44,8 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 
 
 	var ports []string = []string{"8888", "6006", "9091"}
-	resp := utils.CreateDockerContainer(cli,"zjudistributeai/images:v0.3", ports...)
+	resp := utils.CreateDockerContainer(cli, "/root/MachineLearning",
+		"zjudistributeai/images:v0.3", ports...)
 
 	err := utils.StartDockerContainer(cli, resp)
 

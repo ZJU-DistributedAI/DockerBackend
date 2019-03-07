@@ -40,7 +40,7 @@ func GetDockerClient() *client.Client {
 	return cli
 }
 
-func CreateDockerContainer(cli *client.Client, imagename string, ports ...string) container.ContainerCreateCreatedBody {
+func CreateDockerContainer(cli *client.Client, directorypath string, imagename string, ports ...string) container.ContainerCreateCreatedBody {
 
 	//创建容器
 	portMap := make(nat.PortMap, 0)
@@ -69,7 +69,7 @@ func CreateDockerContainer(cli *client.Client, imagename string, ports ...string
 		Mounts: []mount.Mount{
 			{
 				Type: mount.TypeBind,
-				Source: "D:\\MachineLearning",
+				Source: directorypath, //"/root/MachineLearning"
 				Target: "/MachineLearning",
 			},
 		},
