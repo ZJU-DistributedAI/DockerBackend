@@ -19,7 +19,7 @@ func InitDockerClient() {
 
 	ctx := context.Background()
 	var err error
-	cli, err = client.NewClientWithOpts(client.WithVersion("1.37"))
+	cli, err = client.NewClientWithOpts(client.FromEnv)
 
 	if err != nil {
 		log.Panic(err)
@@ -27,6 +27,10 @@ func InitDockerClient() {
 	cli.NegotiateAPIVersion(ctx)
 
 }
+
+
+
+
 
 func GetDockerClient() *client.Client {
 	if cli == nil {

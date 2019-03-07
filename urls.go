@@ -13,6 +13,7 @@ func init(){
 func startDockerBackend(){
 
 
+	http.HandleFunc("/dockerbackend/trainrequest", TrainRequestHandler)
 	http.HandleFunc("/dockerbackend/dockerstatus", GetDockerStatusHandler)
 	http.HandleFunc("/dockerbackend/starttrain", StartTrainHandler)
 
