@@ -40,13 +40,14 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 	w.Header().Set("Access-Control-Allow-Method", "POST,GET")
 
 	from := request.FormValue("from")
+	directorypath := request.FormValue("directorypath")
 
 	var data Data
 	cli := utils.GetDockerClient()
 
 	//暂时在训练的时候不开放端口
 	var ports []string = []string{}
-	resp := utils.CreateDockerContainer(cli, "//root//MachineLearning",
+	resp := utils.CreateDockerContainer(cli, directorypath,
 		"zjudistributeai/images:v0.3", ports...)
 
 	//执行训练任务前回调web后端更新数据库状态
