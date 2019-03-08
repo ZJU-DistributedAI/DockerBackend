@@ -73,7 +73,7 @@ func CreateDockerContainer(cli *client.Client, directorypath string, imagename s
 				Target: "/MachineLearning",
 			},
 		},
-	}, nil, "test")
+	}, nil, "")
 
 	if err != nil {
 		log.Println("创建容器出错: ",err)

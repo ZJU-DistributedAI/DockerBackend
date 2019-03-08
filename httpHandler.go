@@ -42,8 +42,8 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 	var data Data
 	cli := utils.GetDockerClient()
 
-
-	var ports []string = []string{"8888", "6006", "9091"}
+	//暂时在训练的时候不开放端口
+	var ports []string = []string{}
 	resp := utils.CreateDockerContainer(cli, "//root//MachineLearning",
 		"zjudistributeai/images:v0.3", ports...)
 
