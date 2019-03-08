@@ -39,6 +39,8 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Method", "POST,GET")
 
+	from := request.FormValue("from")
+
 	var data Data
 	cli := utils.GetDockerClient()
 
@@ -47,14 +49,19 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 	resp := utils.CreateDockerContainer(cli, "//root//MachineLearning",
 		"zjudistributeai/images:v0.3", ports...)
 
-	err := utils.StartDockerContainer(cli, resp)
+	//执行训练任务前回调web后端更新数据库状态
+	_, err := http.Get("http://127.0.0.1:9090/callback/updatedockerstatus?from="+from+"dockerstatus=1")
+
+
+	err = utils.StartDockerContainer(cli, resp)
 
 	if err != nil {
 		log.Panic("启动容器失败: ", err)
 	}
 
 	utils.WaitForContainer(cli, resp.ID)
-
+	//执行训练任务后
+	_, err = http.Get("http://127.0.0.1:9090/callback/updatedockerstatus?from="+from+"dockerstatus=2")
 
 	data = Data{Msg: "执行训练任务成功", Code: 200}
 
