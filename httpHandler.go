@@ -51,7 +51,7 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 		"zjudistributeai/images:v0.3", ports...)
 
 	//执行训练任务前回调web后端更新数据库状态
-	_, err := http.Get("http://127.0.0.1:9090/callback/updatedockerstatus?from="+from+"dockerstatus=1")
+	_, err := http.Get("http://127.0.0.1:9092/callback/updatedockerstatus?from="+from+"dockerstatus=1")
 
 
 	err = utils.StartDockerContainer(cli, resp)
@@ -62,7 +62,7 @@ func StartTrainHandler(w http.ResponseWriter, request *http.Request){
 
 	utils.WaitForContainer(cli, resp.ID)
 	//执行训练任务后
-	_, err = http.Get("http://127.0.0.1:9090/callback/updatedockerstatus?from="+from+"dockerstatus=2")
+	_, err = http.Get("http://127.0.0.1:9092/callback/updatedockerstatus?from="+from+"dockerstatus=2")
 
 	data = Data{Msg: "执行训练任务成功", Code: 200}
 
