@@ -6,7 +6,6 @@ import (
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
-	"github.com/docker/go-connections/nat"
 	"log"
 )
 
@@ -42,30 +41,30 @@ func GetDockerClient() *client.Client {
 
 func CreateDockerContainer(cli *client.Client, directorypath string, imagename string, ports ...string) container.ContainerCreateCreatedBody {
 
-	//创建容器
-	portMap := make(nat.PortMap, 0)
-
-	exports := make(nat.PortSet, len(ports)+1)
-
-	for i := range ports {
-
-		newPort, err := nat.NewPort("tcp", ports[i])
-		if err != nil {
-			log.Panic(err)
-		}
-		exports[newPort] = struct{}{}
-
-		portBindings := make([]nat.PortBinding, 0, 1)
-		portBindings = append(portBindings, nat.PortBinding{HostPort: ports[i]})
-		portMap[newPort] = portBindings
-	}
+	////创建容器
+	//portMap := make(nat.PortMap, 0)
+	//
+	//exports := make(nat.PortSet, len(ports)+1)
+	//
+	//for i := range ports {
+	//
+	//	newPort, err := nat.NewPort("tcp", ports[i])
+	//	if err != nil {
+	//		log.Panic(err)
+	//	}
+	//	exports[newPort] = struct{}{}
+	//
+	//	portBindings := make([]nat.PortBinding, 0, 1)
+	//	portBindings = append(portBindings, nat.PortBinding{HostPort: ports[i]})
+	//	portMap[newPort] = portBindings
+	//}
 
 	resp, err := cli.ContainerCreate(context.Background(), &container.Config{
 		Image: imagename,
-		ExposedPorts: exports,
+		//ExposedPorts: exports,
 		Cmd: []string{"./train.sh"},
 	}, &container.HostConfig{
-		PortBindings: portMap,
+		//PortBindings: portMap,
 		Mounts: []mount.Mount{
 			{
 				Type: mount.TypeBind,
